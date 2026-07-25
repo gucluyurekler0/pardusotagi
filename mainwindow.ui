@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>550</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Pardus Otağı</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="mainHorizontalLayout">
+
+    <!-- SOL PANEL: Geçmiş Sohbetler ve Yeni Sohbet Butonu -->
+    <item>
+     <layout class="QVBoxLayout" name="leftPanelLayout">
+      <item>
+       <widget class="QPushButton" name="newChatButton">
+        <property name="text">
+         <string>+ Yeni Sohbet</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <!-- HATA ALAN EKSİK NESNE BURASI: chatListWidget -->
+       <widget class="QListWidget" name="chatListWidget"/>
+      </item>
+     </layout>
+    </item>
+
+    <!-- SAĞ PANEL: Sohbet Geçmişi ve Giriş Alanı -->
+    <item>
+     <layout class="QVBoxLayout" name="rightPanelLayout">
+      <item>
+       <widget class="QTextEdit" name="chatHistoryTextEdit">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="inputHorizontalLayout">
+        <item>
+         <widget class="QLineEdit" name="promptLineEdit">
+          <property name="placeholderText">
+           <string>Bir şeyler sorun...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="sendButton">
+          <property name="text">
+           <string>Gönder</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

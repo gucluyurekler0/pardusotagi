@@ -1,0 +1,3 @@
+C:\Qt\Tools\CMake_64\bin\cmake.exe -E rm -f CMakeFiles\KarsilamaUygulamasi.dir/objects.a
+C:\Qt\Tools\mingw1310_64\bin\ar.exe qc CMakeFiles\KarsilamaUygulamasi.dir/objects.a @CMakeFiles\KarsilamaUygulamasi.dir\objects1.rsp
+C:\Qt\Tools\mingw1310_64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\KarsilamaUygulamasi.dir/objects.a -Wl,--no-whole-archive -o KarsilamaUygulamasi.exe -Wl,--out-implib,libKarsilamaUygulamasi.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\KarsilamaUygulamasi.dir\linkLibs.rsp
