@@ -38,9 +38,10 @@ private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *networkManager;
 
-
     QString currentChatId;
+    QString currentChatTitle;
     QJsonArray currentMessages;
+
     bool isGeneratingTitle = false; // O anki istek başlık isteği mi?
 
     void createNewChat();
