@@ -38,12 +38,11 @@ private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *networkManager;
 
-    // Aktif Sohbet Durumu
+
     QString currentChatId;
     QJsonArray currentMessages;
     bool isGeneratingTitle = false; // O anki istek başlık isteği mi?
 
-    // Yardımcı Fonksiyonlar
     void createNewChat();
     void generateTitleForChat(const QString &firstPrompt);
     void saveChatToDisk(const QString &title);
@@ -51,4 +50,4 @@ private:
     void displayChat(const QString &chatId);
 };
 
-#endif // MAINWINDOW_H
+#endif

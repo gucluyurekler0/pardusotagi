@@ -11,28 +11,23 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Ağ isteklerini yönetecek nesne
     networkManager = new QNetworkAccessManager(this);
 
-    // SİNYAL-SLOT BAĞLANTILARI (Buton ve Enter tuşunu bağlayan kısım)
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::on_sendButton_clicked);
     connect(ui->promptLineEdit, &QLineEdit::returnPressed, this, &MainWindow::on_sendButton_clicked);
     connect(ui->newChatButton, &QPushButton::clicked, this, &MainWindow::on_newChatButton_clicked);
     connect(ui->chatListWidget, &QListWidget::itemClicked, this, &MainWindow::on_chatListWidget_itemClicked);
-
-    // Ağ yanıtı geldiğinde tetiklenecek slot
     connect(networkManager, &QNetworkAccessManager::finished, this, &MainWindow::onResponseReceived);
 
-    // Uygulama açılınca geçmişi yükle ve yeni sohbet başlat
     loadAllChatsFromDisk();
     createNewChat();
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     delete ui;
 }
 
-// 🆕 Yeni Sohbet Butonu
 void MainWindow::on_newChatButton_clicked()
 {
     createNewChat();
@@ -46,14 +41,18 @@ void MainWindow::createNewChat()
     ui->promptLineEdit->clear();
 }
 
-// 📤 Mesaj Gönderme
 void MainWindow::on_sendButton_clicked()
 {
     QString prompt = ui->promptLineEdit->text().trimmed();
     if (prompt.isEmpty()) return;
 
-    // Ekrana kullanıcı mesajını yaz
-    ui->chatHistoryTextEdit->append("<b>Siz:</b> " + prompt);
+    QString userHtml = QString(
+                           "<div style='margin-bottom: 12px; background-color: #e9ecef; padding: 10px; border-radius: 8px;'>"
+                           "<b style='color: #0d6efd;'>Siz:</b><br>%1"
+                           "</div>"
+                           ).arg(prompt.toHtmlEscaped().replace("\n", "<br>"));
+
+    ui->chatHistoryTextEdit->append(userHtml);
     ui->promptLineEdit->clear();
 
     QJsonObject userMsg;
@@ -61,16 +60,13 @@ void MainWindow::on_sendButton_clicked()
     userMsg["content"] = prompt;
     currentMessages.append(userMsg);
 
-    // İşlem yapılırken kullanıcıyı bilgilendir
     ui->sendButton->setEnabled(false);
-    ui->chatHistoryTextEdit->append("<i>Yapay Zeka düşünüyor...</i>");
+    ui->chatHistoryTextEdit->append("<div id='thinking' style='color: #6c757d; font-style: italic; margin-bottom: 8px;'>Yapay Zeka düşünüyor...</div>");
 
-    // Eğer sohbetin ilk mesajıysa başlık üret
     if (currentMessages.size() == 1) {
         generateTitleForChat(prompt);
     }
 
-    // Ollama'ya isteği at
     isGeneratingTitle = false;
 
     QUrl url("http://localhost:11434/api/generate");
@@ -78,14 +74,13 @@ void MainWindow::on_sendButton_clicked()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject json;
-    json["model"] = "llama3.2"; // Arka planda indirdiğiniz model adı (örn: "phi3" ise "phi3" yazın)
+    json["model"] = "llama3.2";
     json["prompt"] = prompt;
     json["stream"] = false;
 
     networkManager->post(request, QJsonDocument(json).toJson());
 }
 
-// 🏷️ Başlık Üretme
 void MainWindow::generateTitleForChat(const QString &firstPrompt)
 {
     isGeneratingTitle = true;
@@ -102,14 +97,12 @@ void MainWindow::generateTitleForChat(const QString &firstPrompt)
     networkManager->post(request, QJsonDocument(json).toJson());
 }
 
-// 📩 Yanıt Geldiğinde
 void MainWindow::onResponseReceived(QNetworkReply *reply)
 {
     ui->sendButton->setEnabled(true);
 
-    // "Düşünüyor..." yazısını kaldır
     QString currentText = ui->chatHistoryTextEdit->toHtml();
-    currentText.remove("<i>Yapay Zeka düşünüyor...</i>");
+    currentText.remove("<div id=\"thinking\" style=\"color: #6c757d; font-style: italic; margin-bottom: 8px;\">Yapay Zeka düşünüyor...</div>");
     ui->chatHistoryTextEdit->setHtml(currentText);
 
     if (reply->error() == QNetworkReply::NoError) {
@@ -121,7 +114,15 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
             saveChatToDisk(aiResponse);
             isGeneratingTitle = false;
         } else {
-            ui->chatHistoryTextEdit->append("<b>Yapay Zeka:</b> " + aiResponse + "<br>");
+            QString formattedResponse = aiResponse.toHtmlEscaped().replace("\n", "<br>");
+
+            QString aiHtml = QString(
+                                 "<div style='margin-bottom: 16px; background-color: #f8f9fa; border-left: 4px solid #198754; padding: 12px; border-radius: 6px; line-height: 1.5;'>"
+                                 "<b style='color: #198754;'>Pardus Otağı AI:</b><br><br>%1"
+                                 "</div>"
+                                 ).arg(formattedResponse);
+
+            ui->chatHistoryTextEdit->append(aiHtml);
 
             QJsonObject aiMsg;
             aiMsg["role"] = "assistant";
@@ -129,12 +130,11 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
             currentMessages.append(aiMsg);
         }
     } else {
-        ui->chatHistoryTextEdit->append("<font color='red'><b>Hata:</b> Ollama sunucusuna bağlanılamadı! Arka planda açık olduğundan emin olun.</font><br>");
+        ui->chatHistoryTextEdit->append("<div style='color: red; margin-bottom: 10px;'><b>Hata:</b> Ollama sunucusuna bağlanılamadı!</div>");
     }
     reply->deleteLater();
 }
 
-// 💾 JSON Kayıt
 void MainWindow::saveChatToDisk(const QString &title)
 {
     QFile file("chats.json");
@@ -160,7 +160,6 @@ void MainWindow::saveChatToDisk(const QString &title)
     loadAllChatsFromDisk();
 }
 
-// 📂 Kayıtları Yükleme
 void MainWindow::loadAllChatsFromDisk()
 {
     ui->chatListWidget->clear();
@@ -179,7 +178,6 @@ void MainWindow::loadAllChatsFromDisk()
     }
 }
 
-// 🖱️ Listeden Seçim
 void MainWindow::on_chatListWidget_itemClicked(QListWidgetItem *item)
 {
     QString selectedId = item->data(Qt::UserRole).toString();
@@ -203,7 +201,21 @@ void MainWindow::displayChat(const QString &chatId)
     ui->chatHistoryTextEdit->clear();
     for (const QJsonValue &val : currentMessages) {
         QJsonObject msg = val.toObject();
-        QString role = msg["role"].toString() == "user" ? "<b>Siz:</b> " : "<b>Yapay Zeka:</b> ";
-        ui->chatHistoryTextEdit->append(role + msg["content"].toString() + "<br>");
+        QString role = msg["role"].toString();
+        QString content = msg["content"].toString().toHtmlEscaped().replace("\n", "<br>");
+
+        if (role == "user") {
+            ui->chatHistoryTextEdit->append(QString(
+                                                "<div style='margin-bottom: 12px; background-color: #e9ecef; padding: 10px; border-radius: 8px;'>"
+                                                "<b style='color: #0d6efd;'>Siz:</b><br>%1"
+                                                "</div>"
+                                                ).arg(content));
+        } else {
+            ui->chatHistoryTextEdit->append(QString(
+                                                "<div style='margin-bottom: 16px; background-color: #f8f9fa; border-left: 4px solid #198754; padding: 12px; border-radius: 6px; line-height: 1.5;'>"
+                                                "<b style='color: #198754;'>Pardus Otağı AI:</b><br><br>%1"
+                                                "</div>"
+                                                ).arg(content));
+        }
     }
 }

@@ -6,17 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>550</height>
+    <width>950</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Pardus Otağı</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="mainHorizontalLayout">
+   <layout class="QHBoxLayout" name="mainHorizontalLayout" stretch="1,3">
 
-    <!-- SOL PANEL: Geçmiş Sohbetler ve Yeni Sohbet Butonu -->
+
     <item>
      <layout class="QVBoxLayout" name="leftPanelLayout">
       <item>
@@ -27,13 +27,12 @@
        </widget>
       </item>
       <item>
-       <!-- HATA ALAN EKSİK NESNE BURASI: chatListWidget -->
        <widget class="QListWidget" name="chatListWidget"/>
       </item>
      </layout>
     </item>
 
-    <!-- SAĞ PANEL: Sohbet Geçmişi ve Giriş Alanı -->
+
     <item>
      <layout class="QVBoxLayout" name="rightPanelLayout">
       <item>

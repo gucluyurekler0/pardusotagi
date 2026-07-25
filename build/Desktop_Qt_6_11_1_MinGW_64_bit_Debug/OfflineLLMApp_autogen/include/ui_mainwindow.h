@@ -40,7 +40,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(800, 550);
+        MainWindow->resize(950, 650);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         mainHorizontalLayout = new QHBoxLayout(centralwidget);
@@ -86,6 +86,8 @@ public:
 
         mainHorizontalLayout->addLayout(rightPanelLayout);
 
+        mainHorizontalLayout->setStretch(0, 1);
+        mainHorizontalLayout->setStretch(1, 3);
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
