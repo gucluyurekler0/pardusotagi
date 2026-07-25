@@ -1,4 +1,4 @@
-# 🦁 Pardus Otağı (Yerel & Ç offline Yapay Zeka Asistanı)
+# 🦁 Pardus Otağı (Yerel & offline Yapay Zeka Asistanı)
 
 **Pardus Otağı**, internet bağlantısına ihtiyaç duymadan (**offline**) tamamen bilgisayarınızın **CPU/GPU** gücüyle çalışan, verilerinizi dışarı aktarmayan, güvenli ve özgür bir yapay zeka masaüstü uygulamasıdır.
 
