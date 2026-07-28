@@ -445,6 +445,6 @@ C:/Users/Safak/Documents/akilliasistanim/mainwindow.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
  mdp:C:/Users/Safak/Documents/akilliasistanim/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/OfflineLLMApp_autogen/moc_predefs.h
  mdp:C:/Users/Safak/Documents/akilliasistanim/mainwindow.h
+C:/Users/Safak/Documents/akilliasistanim/main.cpp
 C:/Users/Safak/Documents/akilliasistanim/mainwindow.cpp
  uic:ui_mainwindow.h
-C:/Users/Safak/Documents/akilliasistanim/main.cpp

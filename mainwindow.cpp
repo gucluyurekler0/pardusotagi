@@ -74,7 +74,8 @@ void MainWindow::on_sendButton_clicked()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject json;
-    json["model"] = "llama3.2";
+    //json["model"] = "llama3.2";
+    json["model"] = "qwen2.5:7b";
     json["prompt"] = prompt;
     json["stream"] = false;
 
@@ -90,7 +91,7 @@ void MainWindow::generateTitleForChat(const QString &firstPrompt)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject json;
-    json["model"] = "llama3.2";
+    json["model"] = "qwen2.5:7b";
     json["prompt"] = "Aşağıdaki mesaja göre maksimum 3-4 kelimelik kısa bir sohbet başlığı yaz. Sadece başlığı yaz: " + firstPrompt;
     json["stream"] = false;
 
