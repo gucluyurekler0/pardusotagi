@@ -1,8 +1,8 @@
-# 🦁 Pardus Otağı (Yerel & offline Yapay Zeka Asistanı)
+# 🦁 Pardus Otağı (Yerel & Offline Yapay Zeka Asistanı)
 
 **Pardus Otağı**, internet bağlantısına ihtiyaç duymadan (**offline**) tamamen bilgisayarınızın **CPU/GPU** gücüyle çalışan, verilerinizi dışarı aktarmayan, güvenli ve özgür bir yapay zeka masaüstü uygulamasıdır.
 
-Uygulama, **Ollama** altyapısını kullanarak **Pardus İşletim Sistemi** üzerinde **C++** ve **Qt6** ile geliştirilmiştir. Yerel yapay zeka modelleri (**Llama 3.2, Phi-3** vb.) sayesinde hızlı, gizlilik odaklı ve kesintisiz bir sohbet deneyimi sunar.
+Uygulama, **Ollama** altyapısını kullanarak **Pardus İşletim Sistemi** üzerinde **C++** ve **Qt6** ile geliştirilmiştir. Yerel yapay zeka modelleri (**Qwen 2.5, Llama 3.2, Phi-3** vb.) sayesinde hızlı, gizlilik odaklı ve kesintisiz bir sohbet deneyimi sunar.
 
 ---
 
@@ -13,8 +13,9 @@ Uygulama, **Ollama** altyapısını kullanarak **Pardus İşletim Sistemi** üze
   - Verileriniz tamamen kendi bilgisayarınızda işlenir.
   - Hiçbir veri harici sunuculara gönderilmez.
 
-- 🤖 **Yerel Yapay Zeka Modelleri**
-  - Ollama üzerinden çalışan Llama 3.2, Phi-3 ve diğer yerel modelleri destekler.
+- 🤖 **Esnek ve Yerel Yapay Zeka Modelleri**
+  - Varsayılan olarak yüksek Türkçe başarısına sahip **Qwen 2.5 (7B)** modelini kullanır.
+  - Kod üzerinden istenilen diğer yerel Ollama modellerine kolayca geçiş yapılabilir.
 
 - 💬 **Otomatik Sohbet Başlığı**
   - Yeni oluşturulan her sohbetin ilk mesajına göre yapay zeka otomatik başlık üretir.
@@ -31,33 +32,58 @@ Uygulama, **Ollama** altyapısını kullanarak **Pardus İşletim Sistemi** üze
 
 ---
 
-# 🤖 Ollama Kurulumu
+# 🤖 Ollama Kurulumu & Model Seçimi
 
-Pardus Otağı'nın çalışabilmesi için bilgisayarınızda **Ollama** kurulu olmalıdır.
+Pardus Otağı'nın çalışabilmesi için bilgisayarınızda **Ollama** kurulu olmalı ve tercih edilen yapay zeka modeli indirilmiş olmalıdır.
 
 ## 1. Ollama Kurulumu
 
-```bash
 curl -fsSL https://ollama.com/install.sh | sh
-```
 
 ---
 
 ## 2. Yapay Zeka Modeli İndirme
 
-### Llama 3.2 (Önerilen)
+### Qwen 2.5:7b (Varsayılan ve Önerilen)
+Yüksek Türkçe dil hakimiyeti ve akıl yürütme becerisi nedeniyle projenin varsayılan modelidir:
 
-```bash
-ollama run llama3.2
-```
+ollama run qwen2.5:7b
 
-### Phi-3 (Düşük Donanımlar İçin)
+### Alternatif Modeller (Gereksinime Göre)
 
-```bash
-ollama run phi3
-```
+- **Llama 3.2 (Eski Varsayılan / Standart Dengeli Model):**
+  ollama run llama3.2
 
-> **Not:** Model indirildikten sonra internet bağlantısını tamamen keserek uygulamayı çevrimdışı kullanabilirsiniz.
+- **Qwen 2.5 (3B) / Phi-3 (Düşük RAM / Donanımlar İçin):**
+  ollama run qwen2.5:3b
+  # VEYA
+  ollama run phi3
+
+- **DeepSeek R1 (Kodlama ve Mantık Odaklı):**
+  ollama run deepseek-r1:8b
+
+> **Not:** Tercih ettiğiniz model indirildikten sonra internet bağlantısını tamamen keserek uygulamayı çevrimdışı kullanabilirsiniz.
+
+---
+
+# ⚙️ Farklı Bir Model Nasıl Kullanılır? (Modeller Arası Geçiş)
+
+Uygulamanın kullandığı yapay zeka modelini veya eski sürümlerdeki **Llama 3.2** modelini tekrar kullanmak isterseniz `mainwindow.cpp` dosyasında küçük bir değişiklik yapmanız yeterlidir:
+
+1. **`mainwindow.cpp`** dosyasını açın.
+2. `on_sendButton_clicked` ve `generateTitleForChat` fonksiyonları içerisindeki `json["model"]` satırlarını bulun.
+3. Model adını istediğiniz Ollama modeliyle değiştirin:
+
+// Varsayılan Güncel Kullanım (Qwen 2.5):
+json["model"] = "qwen2.5:7b";
+
+// Eski Sürüme (Llama 3.2) Dönmek İsterseniz:
+// json["model"] = "llama3.2";
+
+// Düşük Sistemler İçin (Qwen 2.5 3B):
+// json["model"] = "qwen2.5:3b";
+
+4. Değişikliği kaydettikten sonra projeyi yeniden derleyin (`make`).
 
 ---
 
@@ -65,38 +91,30 @@ ollama run phi3
 
 ## 1. Gerekli Paketleri Kurun
 
-```bash
 sudo apt update
 sudo apt install build-essential cmake qt6-base-dev qt6-tools-dev
-```
 
 ---
 
 ## 2. Projeyi Klonlayın
 
-```bash
 git clone https://github.com/gucluyurekler0/pardusotagi.git
 cd pardusotagi
-```
 
 ---
 
 ## 3. Derleyin
 
-```bash
 mkdir -p build
 cd build
 cmake ..
 make
-```
 
 ---
 
 ## 4. Uygulamayı Çalıştırın
 
-```bash
 ./OfflineLLMApp
-```
 
 ---
 
@@ -104,14 +122,11 @@ make
 
 Pardus uygulama menüsüne eklemek için:
 
-```bash
 mkdir -p ~/.local/share/applications
 nano ~/.local/share/applications/pardus-otagi.desktop
-```
 
 Aşağıdaki içeriği ekleyin:
 
-```ini
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -120,14 +135,11 @@ Comment=Yerel ve Çevrimdışı Yapay Zeka Asistanı
 Exec=sh -c "$HOME/pardusotagi/build/OfflineLLMApp"
 Terminal=false
 Categories=Utility;ArtificialIntelligence;Development;
-```
 
 Dosyayı kaydedin ve aşağıdaki komutları çalıştırın:
 
-```bash
 chmod +x ~/.local/share/applications/pardus-otagi.desktop
 update-desktop-database ~/.local/share/applications
-```
 
 ---
 
@@ -148,8 +160,7 @@ update-desktop-database ~/.local/share/applications
 - C++
 - Qt6
 - Ollama
-- Llama 3.2
-- Phi-3
+- Qwen 2.5 / Llama 3.2 / Phi-3
 - JSON
 - CMake
 
