@@ -38,7 +38,7 @@ Pardus Otağı'nın çalışabilmesi için bilgisayarınızda **Ollama** kurulu 
 
 ## 1. Ollama Kurulumu
 
-curl -fsSL https://ollama.com/install.sh | sh
+`curl -fsSL https://ollama.com/install.sh | sh`
 
 ---
 
@@ -47,20 +47,20 @@ curl -fsSL https://ollama.com/install.sh | sh
 ### Qwen 2.5:7b (Varsayılan ve Önerilen)
 Yüksek Türkçe dil hakimiyeti ve akıl yürütme becerisi nedeniyle projenin varsayılan modelidir:
 
-ollama run qwen2.5:7b
+`ollama run qwen2.5:7b`
 
 ### Alternatif Modeller (Gereksinime Göre)
 
-- **Llama 3.2 (Eski Varsayılan / Standart Dengeli Model):**
-  ollama run llama3.2
+- **Llama 3.2 (Eski Varsayılan / Standart Dengeli Model):**  
+  `ollama run llama3.2`
 
-- **Qwen 2.5 (3B) / Phi-3 (Düşük RAM / Donanımlar İçin):**
-  ollama run qwen2.5:3b
-  # VEYA
-  ollama run phi3
+- **Qwen 2.5 (3B) / Phi-3 (Düşük RAM / Donanımlar İçin):**  
+  `ollama run qwen2.5:3b`  
+  `# VEYA`  
+  `ollama run phi3`
 
-- **DeepSeek R1 (Kodlama ve Mantık Odaklı):**
-  ollama run deepseek-r1:8b
+- **DeepSeek R1 (Kodlama ve Mantık Odaklı):**  
+  `ollama run deepseek-r1:8b`
 
 > **Not:** Tercih ettiğiniz model indirildikten sonra internet bağlantısını tamamen keserek uygulamayı çevrimdışı kullanabilirsiniz.
 
@@ -74,14 +74,14 @@ Uygulamanın kullandığı yapay zeka modelini veya eski sürümlerdeki **Llama 
 2. `on_sendButton_clicked` ve `generateTitleForChat` fonksiyonları içerisindeki `json["model"]` satırlarını bulun.
 3. Model adını istediğiniz Ollama modeliyle değiştirin:
 
-// Varsayılan Güncel Kullanım (Qwen 2.5):
-json["model"] = "qwen2.5:7b";
+`// Varsayılan Güncel Kullanım (Qwen 2.5):`  
+`json["model"] = "qwen2.5:7b";`  
 
-// Eski Sürüme (Llama 3.2) Dönmek İsterseniz:
-// json["model"] = "llama3.2";
+`// Eski Sürüme (Llama 3.2) Dönmek İsterseniz:`  
+`// json["model"] = "llama3.2";`  
 
-// Düşük Sistemler İçin (Qwen 2.5 3B):
-// json["model"] = "qwen2.5:3b";
+`// Düşük Sistemler İçin (Qwen 2.5 3B):`  
+`// json["model"] = "qwen2.5:3b";`  
 
 4. Değişikliği kaydettikten sonra projeyi yeniden derleyin (`make`).
 
@@ -91,30 +91,30 @@ json["model"] = "qwen2.5:7b";
 
 ## 1. Gerekli Paketleri Kurun
 
-sudo apt update
-sudo apt install build-essential cmake qt6-base-dev qt6-tools-dev
+`sudo apt update`  
+`sudo apt install build-essential cmake qt6-base-dev qt6-tools-dev`  
 
 ---
 
 ## 2. Projeyi Klonlayın
 
-git clone https://github.com/gucluyurekler0/pardusotagi.git
-cd pardusotagi
+`git clone https://github.com/gucluyurekler0/pardusotagi.git`  
+`cd pardusotagi`  
 
 ---
 
 ## 3. Derleyin
 
-mkdir -p build
-cd build
-cmake ..
-make
+`mkdir -p build`  
+`cd build`  
+`cmake ..`  
+`make`  
 
 ---
 
 ## 4. Uygulamayı Çalıştırın
 
-./OfflineLLMApp
+`./OfflineLLMApp`  
 
 ---
 
@@ -122,24 +122,24 @@ make
 
 Pardus uygulama menüsüne eklemek için:
 
-mkdir -p ~/.local/share/applications
-nano ~/.local/share/applications/pardus-otagi.desktop
+`mkdir -p ~/.local/share/applications`  
+`nano ~/.local/share/applications/pardus-otagi.desktop`  
 
 Aşağıdaki içeriği ekleyin:
 
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Pardus Otağı
-Comment=Yerel ve Çevrimdışı Yapay Zeka Asistanı
-Exec=sh -c "$HOME/pardusotagi/build/OfflineLLMApp"
-Terminal=false
-Categories=Utility;ArtificialIntelligence;Development;
+`[Desktop Entry]`  
+`Version=1.0`  
+`Type=Application`  
+`Name=Pardus Otağı`  
+`Comment=Yerel ve Çevrimdışı Yapay Zeka Asistanı`  
+`Exec=sh -c "$HOME/pardusotagi/build/OfflineLLMApp"`  
+`Terminal=false`  
+`Categories=Utility;ArtificialIntelligence;Development;`  
 
 Dosyayı kaydedin ve aşağıdaki komutları çalıştırın:
 
-chmod +x ~/.local/share/applications/pardus-otagi.desktop
-update-desktop-database ~/.local/share/applications
+`chmod +x ~/.local/share/applications/pardus-otagi.desktop`  
+`update-desktop-database ~/.local/share/applications`  
 
 ---
 
