@@ -91,12 +91,13 @@ void MainWindow::generateTitleForChat(const QString &firstPrompt)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject json;
-    json["model"] = "qwen2.5:7b";
+    json["model"] = "qwen2.5:3b";
     json["prompt"] = "Aşağıdaki mesaja göre maksimum 3-4 kelimelik kısa bir sohbet başlığı yaz. Sadece başlığı yaz: " + firstPrompt;
     json["stream"] = false;
 
     networkManager->post(request, QJsonDocument(json).toJson());
 }
+
 
 void MainWindow::onResponseReceived(QNetworkReply *reply)
 {
@@ -113,11 +114,11 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
         QString aiResponse = jsonObj["response"].toString().trimmed();
 
         if (isGeneratingTitle) {
-            // Başlık üretme isteğiyse başlığı kaydet
-            saveChatToDisk(aiResponse);
+            // Başlık üretme isteği tamamlandı: Başlığı kaydet ve listeyi tazele
             isGeneratingTitle = false;
+            saveChatToDisk(aiResponse);
         } else {
-            // Normal sohbet yanıtıysa ekranı ve geçmişi güncelle
+            // Normal sohbet yanıtı geldiyse ekrana ekle
             QString formattedResponse = aiResponse.toHtmlEscaped().replace("\n", "<br>");
 
             QString aiHtml = QString(
@@ -134,11 +135,12 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
             aiMsg["content"] = aiResponse;
             currentMessages.append(aiMsg);
 
-            // Sohbeti güncelle ve diske kaydet (Böylece sohbet güncel kalır)
+            // Başlığı değiştirmeden (mevcut başlığı koruyarak) diske kaydet
             saveChatToDisk(currentChatTitle);
         }
     } else {
         ui->chatHistoryTextEdit->append("<div style='color: red; margin-bottom: 10px;'><b>Hata:</b> Ollama sunucusuna bağlanılamadı!</div>");
+        isGeneratingTitle = false;
     }
     reply->deleteLater();
 }
@@ -146,6 +148,7 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
 
 void MainWindow::saveChatToDisk(const QString &title)
 {
+    // Yalnızca gelen başlık doluysa başlığı güncelle
     if (!title.isEmpty()) {
         currentChatTitle = title;
     }
@@ -160,6 +163,8 @@ void MainWindow::saveChatToDisk(const QString &title)
 
     QJsonObject singleChat;
     singleChat["id"] = currentChatId;
+
+    // Eğer üretilmiş bir başlık yoksa geçici olarak "Yeni Sohbet" yaz, üretildiyse üretilen başlığı koy
     singleChat["title"] = currentChatTitle.isEmpty() ? "Yeni Sohbet" : currentChatTitle;
     singleChat["messages"] = currentMessages;
 
@@ -170,9 +175,10 @@ void MainWindow::saveChatToDisk(const QString &title)
         file.close();
     }
 
-    // Sol listedeki sohbetleri ekrana yeniden yükle (Tazele)
+    // Sol listedeki sohbetleri ekrana yeniden yükle
     loadAllChatsFromDisk();
 }
+
 
 
 void MainWindow::loadAllChatsFromDisk()
