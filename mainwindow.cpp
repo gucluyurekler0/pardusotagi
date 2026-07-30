@@ -66,7 +66,7 @@ void MainWindow::on_sendButton_clicked()
     ui->sendButton->setEnabled(false);
     ui->chatHistoryTextEdit->append("<div id='thinking' style='color: #6c757d; font-style: italic; margin-bottom: 8px;'>Yapay Zeka düşünüyor...</div>");
 
-    // İlk mesajsa geçici başlığı belirlenen metinden alıyoruz
+   
     if (currentMessages.size() == 1) {
         currentChatTitle = prompt.length() > 25 ? prompt.left(25) + "..." : prompt;
     }
@@ -105,7 +105,7 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
 {
     ui->sendButton->setEnabled(true);
 
-    // "Düşünüyor..." yazısını kaldır
+    
     QString currentText = ui->chatHistoryTextEdit->toHtml();
     currentText.remove("<div id=\"thinking\" style=\"color: #6c757d; font-style: italic; margin-bottom: 8px;\">Yapay Zeka düşünüyor...</div>");
     ui->chatHistoryTextEdit->setHtml(currentText);
@@ -137,7 +137,7 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
             saveChatToDisk(currentChatTitle);
         }
     } else {
-        // Gerçek ağ veya Ollama hatasını ekrana yazdırır
+        
         QString errorDetail = reply->errorString();
         ui->chatHistoryTextEdit->append(
             QString("<div style='color: red; margin-bottom: 10px;'><b>Hata:</b> %1</div>").arg(errorDetail)
