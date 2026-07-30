@@ -10,7 +10,7 @@ Aşağıda verilen kodları terminal penceresine kopyala/yapıştır ile yazarak
 
 ---
 
-# ✨ Özellikler
+#  Özellikler
 
 - 🔒 **%100 Çevrimdışı ve Güvenli**
   - İnternet bağlantısı gerektirmez.
@@ -18,7 +18,7 @@ Aşağıda verilen kodları terminal penceresine kopyala/yapıştır ile yazarak
   - Hiçbir veri harici sunuculara gönderilmez.
 
 - 🤖 **Esnek ve Yerel Yapay Zeka Modelleri**
-  - Varsayılan olarak yüksek Türkçe başarısına sahip **Qwen 2.5 (7B)** modelini kullanır.
+  - Varsayılan olarak yüksek Türkçe başarısına sahip ** llama 3.2 ** modelini kullanır.
   - Kod üzerinden istenilen diğer yerel Ollama modellerine kolayca geçiş yapılabilir.
 
 - 💬 **Otomatik Sohbet Başlığı**
@@ -31,7 +31,7 @@ Aşağıda verilen kodları terminal penceresine kopyala/yapıştır ile yazarak
   - Sol panelden eski konuşmalara tek tıklamayla erişebilirsiniz.
   - İstediğiniz zaman yeni sohbet başlatabilirsiniz.
 
-- ⚡ **Yüksek Performans**
+-  **Yüksek Performans**
   - C++ ve Qt6 ile geliştirilmiş hafif ve hızlı masaüstü uygulaması.
 
 ---
