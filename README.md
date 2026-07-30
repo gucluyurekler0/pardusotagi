@@ -119,7 +119,7 @@ sudo apt install build-essential cmake qt6-base-dev qt6-tools-dev
 ## 2. Projeyi Klonlayın
 
 ```bash
-git clone [https://github.com/gucluyurekler0/pardusotagi.git](https://github.com/gucluyurekler0/pardusotagi.git)
+git clone https://github.com/gucluyurekler0/pardusotagi.git
 cd pardusotagi
 ```
 
