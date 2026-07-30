@@ -45,7 +45,7 @@ Pardus Otağı'nın çalışabilmesi için bilgisayarınızda **Ollama** kurulu 
 ## 1. Ollama Kurulumu
 
 ```bash
-curl -fsSL [https://ollama.com/install.sh](https://ollama.com/install.sh) | sh
+curl -fsSL https://ollama.com/install.sh| sh
 ```
 
 ---
