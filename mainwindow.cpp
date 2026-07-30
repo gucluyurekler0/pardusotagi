@@ -69,7 +69,7 @@ void MainWindow::on_sendButton_clicked()
 
     isGeneratingTitle = false;
 
-    QUrl url("http://localhost:11434/api/generate");
+    QUrl url("http://127.0.0.1:11434/api/generate");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -86,7 +86,7 @@ void MainWindow::generateTitleForChat(const QString &firstPrompt)
 {
     isGeneratingTitle = true;
 
-    QUrl url("http://localhost:11434/api/generate");
+    QUrl url("http://127.0.0.1:11434/api/generate");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
