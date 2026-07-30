@@ -50,7 +50,7 @@ curl -fsSL https://ollama.com/install.sh| sh
 
 ## 2. Yapay Zeka Modeli İndirme
 
-### Qwen 2.5:7b (Varsayılan ve Önerilen)
+### llama 3.2 (Varsayılan ve Önerilen)
 Yüksek Türkçe dil hakimiyeti ve akıl yürütme becerisi nedeniyle projenin varsayılan modelidir:
 
 ```bash
@@ -60,7 +60,7 @@ ollama run llama3.2:latest
 
 ### Alternatif Modeller (Gereksinime Göre)
 
-- **Llama 3.2 (Eski Varsayılan / Standart Dengeli Model):**
+- **Qwen için iki model bulunmaktadır :**
   ```bash
  ollama run qwen2.5:7b
   ```
