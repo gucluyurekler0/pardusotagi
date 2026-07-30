@@ -4,7 +4,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QMessageBox>
+#include <QUuid>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -36,6 +38,7 @@ void MainWindow::on_newChatButton_clicked()
 void MainWindow::createNewChat()
 {
     currentChatId = QUuid::createUuid().toString();
+    currentChatTitle = "";
     currentMessages = QJsonArray();
     ui->chatHistoryTextEdit->clear();
     ui->promptLineEdit->clear();
@@ -63,8 +66,9 @@ void MainWindow::on_sendButton_clicked()
     ui->sendButton->setEnabled(false);
     ui->chatHistoryTextEdit->append("<div id='thinking' style='color: #6c757d; font-style: italic; margin-bottom: 8px;'>Yapay Zeka düşünüyor...</div>");
 
+    // İlk mesajsa geçici başlığı belirlenen metinden alıyoruz
     if (currentMessages.size() == 1) {
-        generateTitleForChat(prompt);
+        currentChatTitle = prompt.length() > 25 ? prompt.left(25) + "..." : prompt;
     }
 
     isGeneratingTitle = false;
@@ -74,8 +78,7 @@ void MainWindow::on_sendButton_clicked()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject json;
-    //json["model"] = "llama3.2";
-    json["model"] = "qwen2.5:7b";
+    json["model"] = "llama3.2:latest"; // Yüklü modeliniz
     json["prompt"] = prompt;
     json["stream"] = false;
 
@@ -91,13 +94,12 @@ void MainWindow::generateTitleForChat(const QString &firstPrompt)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject json;
-    json["model"] = "qwen2.5:3b";
+    json["model"] = "llama3.2:latest"; // Yüklü modeliniz
     json["prompt"] = "Aşağıdaki mesaja göre maksimum 3-4 kelimelik kısa bir sohbet başlığı yaz. Sadece başlığı yaz: " + firstPrompt;
     json["stream"] = false;
 
     networkManager->post(request, QJsonDocument(json).toJson());
 }
-
 
 void MainWindow::onResponseReceived(QNetworkReply *reply)
 {
@@ -114,11 +116,9 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
         QString aiResponse = jsonObj["response"].toString().trimmed();
 
         if (isGeneratingTitle) {
-            // Başlık üretme isteği tamamlandı: Başlığı kaydet ve listeyi tazele
             isGeneratingTitle = false;
             saveChatToDisk(aiResponse);
         } else {
-            // Normal sohbet yanıtı geldiyse ekrana ekle
             QString formattedResponse = aiResponse.toHtmlEscaped().replace("\n", "<br>");
 
             QString aiHtml = QString(
@@ -129,26 +129,26 @@ void MainWindow::onResponseReceived(QNetworkReply *reply)
 
             ui->chatHistoryTextEdit->append(aiHtml);
 
-            // Yanıtı mesaj geçmişine ekle
             QJsonObject aiMsg;
             aiMsg["role"] = "assistant";
             aiMsg["content"] = aiResponse;
             currentMessages.append(aiMsg);
 
-            // Başlığı değiştirmeden (mevcut başlığı koruyarak) diske kaydet
             saveChatToDisk(currentChatTitle);
         }
     } else {
-        ui->chatHistoryTextEdit->append("<div style='color: red; margin-bottom: 10px;'><b>Hata:</b> Ollama sunucusuna bağlanılamadı!</div>");
+        // Gerçek ağ veya Ollama hatasını ekrana yazdırır
+        QString errorDetail = reply->errorString();
+        ui->chatHistoryTextEdit->append(
+            QString("<div style='color: red; margin-bottom: 10px;'><b>Hata:</b> %1</div>").arg(errorDetail)
+        );
         isGeneratingTitle = false;
     }
     reply->deleteLater();
 }
 
-
 void MainWindow::saveChatToDisk(const QString &title)
 {
-    // Yalnızca gelen başlık doluysa başlığı güncelle
     if (!title.isEmpty()) {
         currentChatTitle = title;
     }
@@ -163,8 +163,6 @@ void MainWindow::saveChatToDisk(const QString &title)
 
     QJsonObject singleChat;
     singleChat["id"] = currentChatId;
-
-    // Eğer üretilmiş bir başlık yoksa geçici olarak "Yeni Sohbet" yaz, üretildiyse üretilen başlığı koy
     singleChat["title"] = currentChatTitle.isEmpty() ? "Yeni Sohbet" : currentChatTitle;
     singleChat["messages"] = currentMessages;
 
@@ -175,11 +173,8 @@ void MainWindow::saveChatToDisk(const QString &title)
         file.close();
     }
 
-    // Sol listedeki sohbetleri ekrana yeniden yükle
     loadAllChatsFromDisk();
 }
-
-
 
 void MainWindow::loadAllChatsFromDisk()
 {
@@ -199,13 +194,11 @@ void MainWindow::loadAllChatsFromDisk()
     }
 }
 
-
 void MainWindow::on_chatListWidget_itemClicked(QListWidgetItem *item)
 {
     QString selectedId = item->data(Qt::UserRole).toString();
     displayChat(selectedId);
 }
-
 
 void MainWindow::displayChat(const QString &chatId)
 {
@@ -219,6 +212,7 @@ void MainWindow::displayChat(const QString &chatId)
 
     QJsonObject chat = allChats[chatId].toObject();
     currentChatId = chatId;
+    currentChatTitle = chat["title"].toString();
     currentMessages = chat["messages"].toArray();
 
     ui->chatHistoryTextEdit->clear();
