@@ -5,16 +5,16 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    // Uygulama geneline modern ve aydınlık tema stili
+   
     a.setStyleSheet(R"(
-        /* Ana Pencere ve Genel Arka Plan */
+     
         QMainWindow, QWidget {
             background-color: #f8f9fa;
             color: #212529;
             font-family: 'Segoe UI', Ubuntu, sans-serif;
         }
 
-        /* Sol Yan Menü Paneli ve Liste */
+   
         QListWidget {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
             font-weight: bold;
         }
 
-        /* Butonlar */
+       
         QPushButton {
             background-color: #0d6efd;
             color: #ffffff;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
             padding: 12px;
         }
 
-        /* Mesaj Giriş Kutusu (QLineEdit) */
+     
         QLineEdit {
             background-color: #ffffff;
             border: 1px solid #ced4da;
