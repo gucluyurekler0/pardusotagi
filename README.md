@@ -61,9 +61,10 @@ ollama run llama3.2:latest
 ### Alternatif Modeller (Gereksinime Göre)
 
 - **Qwen için iki model bulunmaktadır :**
-  ```bash
+```bash
  ollama run qwen2.5:7b
-  ```
+
+```
 
 - **Qwen 2.5 (3B) / Phi-3 (Düşük RAM / Donanımlar İçin):**
   ```bash
