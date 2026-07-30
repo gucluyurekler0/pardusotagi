@@ -1,14 +1,12 @@
-Kusura bakma, anlaşmazlık için haklısın. Sorunun kaynağı şu: Sohbet arayüzlerinde metin içerisine üçlü kesme işareti (```) koyduğumuzda, sistem bunu otomatik olarak algılayıp mesajı parçalara bölüyor.
 
-Bunu aşmak ve hem kod formatlarını tam korumak hem de mesajı bölmeden TEK BİR KOD HÜCRESİ içinde sunabilmek için dış bloğu girintili (indented) formatta hazırladım.
-
-Aşağıdaki Kopyala butonuna basıp direkt README.md dosyana yapıştırabilirsin:
 
 # 🦁 Pardus Otağı (Yerel & Offline Yapay Zeka Asistanı)
 
 **Pardus Otağı**, internet bağlantısına ihtiyaç duymadan (**offline**) tamamen bilgisayarınızın **CPU/GPU** gücüyle çalışan, verilerinizi dışarı aktarmayan, güvenli ve özgür bir yapay zeka masaüstü uygulamasıdır.
 
 Uygulama, **Ollama** altyapısını kullanarak **Pardus İşletim Sistemi** üzerinde **C++** ve **Qt6** ile geliştirilmiştir. Yerel yapay zeka modelleri (**Qwen 2.5, Llama 3.2, Phi-3** vb.) sayesinde hızlı, gizlilik odaklı ve kesintisiz bir sohbet deneyimi sunar.
+
+Aşağıda verilen kodları terminal penceresine kopyala/yapıştır ile yazarak kurulum ve ayarları yapabilirsiniz.
 
 ---
 
@@ -56,14 +54,15 @@ curl -fsSL https://ollama.com/install.sh| sh
 Yüksek Türkçe dil hakimiyeti ve akıl yürütme becerisi nedeniyle projenin varsayılan modelidir:
 
 ```bash
-ollama run qwen2.5:7b
+ollama run llama3.2:latest
+
 ```
 
 ### Alternatif Modeller (Gereksinime Göre)
 
 - **Llama 3.2 (Eski Varsayılan / Standart Dengeli Model):**
   ```bash
-  ollama run llama3.2
+ ollama run qwen2.5:7b
   ```
 
 - **Qwen 2.5 (3B) / Phi-3 (Düşük RAM / Donanımlar İçin):**
@@ -72,7 +71,11 @@ ollama run qwen2.5:7b
   # VEYA
   ollama run phi3
   ```
-
+- **Kurulu modellerin isimlerini öğrenme:**
+  ```bash
+  ollama list
+  ```
+  
 - **DeepSeek R1 (Kodlama ve Mantık Odaklı):**
   ```bash
   ollama run deepseek-r1:8b
